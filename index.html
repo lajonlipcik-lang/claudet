@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claudet — AI Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="panel topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark">C</div>
+          <div>
+            <div class="brand-name">Claudet</div>
+            <div class="brand-subtitle">AI SITE BUILDER</div>
+          </div>
+        </div>
+
+        <nav class="topnav">
+          <a href="#">Рабочее пространство</a>
+          <a href="#">Проекты</a>
+          <a href="#">Шаблоны</a>
+          <a href="#">Деплой</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="btn btn-light" id="saveProjectBtn">Сохранить</button>
+          <button class="btn btn-dark" id="openSettingsBtn">Настройки</button>
+        </div>
+      </header>
+
+      <main class="workspace-grid">
+        <aside class="panel chat-panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Builder</div>
+              <h1>Рабочая зона</h1>
+            </div>
+            <button class="btn btn-light small">Новый</button>
+          </div>
+
+          <div id="chatList" class="chat-list">
+            <div class="message ai">
+              <div class="message-label">Claudet AI</div>
+              <p>Привет — я Claudet. Опиши, что хочешь собрать, и я сгенерирую проект прямо в браузере.</p>
+            </div>
+          </div>
+
+          <div class="prompt-box">
+            <div class="prompt-top">
+              <span class="eyebrow">Промпт</span>
+              <button class="btn btn-light small" id="addContextBtn">+ Контекст</button>
+            </div>
+
+            <textarea id="promptInput" placeholder="Собери премиальную SaaS-страницу для AI-компании в темной редакторской теме, с hero, ценами и продуктовыми блоками..."></textarea>
+
+            <div class="prompt-actions">
+              <div id="contextChips" class="chips">
+                <span>бренд</span>
+                <span>рост</span>
+              </div>
+              <button id="generateBtn" class="btn btn-dark">Сгенерировать</button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="panel right-panel">
+          <div class="panel-head tabs-wrap">
+            <div class="tab-group">
+              <button class="tab active" data-tab="preview">Предпросмотр</button>
+              <button class="tab" data-tab="editor">Редактор кода</button>
+              <button class="tab" data-tab="explorer">Проводник файлов</button>
+            </div>
+
+            <div class="header-actions">
+              <button class="btn btn-light small" id="rollbackBtn">Откат</button>
+              <button class="btn btn-light small" id="copyBtn">Копировать</button>
+              <button class="btn btn-dark small" id="exportBtn">Экспорт</button>
+            </div>
+          </div>
+
+          <div id="previewTab" class="tab-panel">
+            <div class="preview-wrap">
+              <div class="preview-header">
+                <div class="live-row">
+                  <span class="live-dot"></span>
+                  <span>Предпросмотр</span>
+                </div>
+                <span id="runtimeBadge" class="runtime-pill">Локальный режим</span>
+              </div>
+
+              <iframe id="previewFrame" class="preview-iframe" title="preview"></iframe>
+            </div>
+          </div>
+
+          <div id="editorTab" class="tab-panel hidden">
+            <div class="editor-layout">
+              <div class="file-pane">
+                <div class="eyebrow">Файлы</div>
+                <div id="fileList" class="file-list"></div>
+              </div>
+
+              <div class="code-pane">
+                <div class="editor-header">
+                  <span class="eyebrow">Редактор</span>
+                  <span id="selectedFileName">index.html</span>
+                </div>
+                <textarea id="editorTextarea" spellcheck="false"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="explorerTab" class="tab-panel hidden">
+            <div class="explorer-layout">
+              <div class="file-pane">
+                <div class="eyebrow">Проект</div>
+                <div id="explorerTree" class="file-list"></div>
+              </div>
+
+              <div class="overview-pane">
+                <div class="overview-header">
+                  <h2>Обзор проекта</h2>
+                  <span id="projectBadge" class="project-badge">Demo</span>
+                </div>
+
+                <div class="stats">
+                  <div class="stat-card">
+                    <span class="eyebrow">Файлы</span>
+                    <strong id="statFiles">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="eyebrow">Версии</span>
+                    <strong id="statVersions">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="eyebrow">Режим</span>
+                    <strong id="statusPill">Локальный</strong>
+                  </div>
+                </div>
+
+                <div class="note-box">
+                  <div class="eyebrow">Итог ИИ</div>
+                  <p id="aiOverview">Пока нет описания проекта.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="settingsModal" class="modal-backdrop hidden">
+      <div class="modal">
+        <div class="modal-head">
+          <div>
+            <div class="eyebrow">Configuration</div>
+            <h2>Настройки</h2>
+          </div>
+          <button id="closeSettingsBtn" class="btn btn-dark small">Закрыть</button>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-box">
+            <div class="eyebrow">xAI / Grok</div>
+
+            <label for="grokKey">GROK_API_KEY</label>
+            <input id="grokKey" type="password" placeholder="Вставьте ключ xAI/Grok" />
+
+            <label for="grokModel">Модель</label>
+            <select id="grokModel">
+              <option value="grok-beta">grok-beta</option>
+              <option value="grok-2">grok-2</option>
+              <option value="grok-2-latest">grok-2-latest</option>
+            </select>
+          </div>
+
+          <div class="settings-box">
+            <div class="eyebrow">Инфраструктура</div>
+
+            <label for="cfWorkers">Cloudflare Workers</label>
+            <input id="cfWorkers" type="text" placeholder="https://..." />
+
+            <label for="cfPages">Cloudflare Pages</label>
+            <input id="cfPages" type="text" placeholder="https://..." />
+
+            <label for="cfR2">R2 / Storage</label>
+            <input id="cfR2" type="text" placeholder="bucket or name" />
+          </div>
+
+          <div class="settings-box full-span">
+            <div class="eyebrow">База данных</div>
+
+            <div class="settings-grid subgrid">
+              <div>
+                <label for="supabaseUrl">Supabase URL</label>
+                <input id="supabaseUrl" type="text" placeholder="https://..." />
+              </div>
+              <div>
+                <label for="dbUrl">Postgres / D1 / Firebase</label>
+                <input id="dbUrl" type="text" placeholder="postgres://..." />
+              </div>
+            </div>
+
+            <div class="footer-note">
+              Если внешняя база или Cloudflare не настроены, приложение автоматически работает в локальном режиме: IndexedDB / localStorage / mock API. Это позволяет интерфейсу полностью работать в браузере без сбоев.
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button id="resetSettingsBtn" class="btn btn-light">Сброс</button>
+          <button id="saveSettingsBtn" class="btn btn-dark">Сохранить</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

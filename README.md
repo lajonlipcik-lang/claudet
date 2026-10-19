@@ -1,2 +1,25 @@
-# claudet
-Dark-mode AI website builder landing app for GitHub Pages
+# Claudet
+
+Темная AI-платформа для генерации веб-сайтов и продуктов в браузере.
+
+## Запуск
+Откройте `index.html` локально в браузере или опубликуйте репозиторий на GitHub Pages.
+
+## GitHub Pages
+1. Откройте репозиторий на GitHub.
+2. Перейдите в `Settings` → `Pages`.
+3. Выберите `Deploy from branch` → `main` → `/ (root)`.
+4. Сохраните.
+
+После публикации URL будет:
+`https://<ваш-login>.github.io/claudet/`
+
+## Функционал
+- темная Claude-стиль рабочая зона
+- чат с ИИ
+- предпросмотр в iframe
+- редактор файлов
+- сохранение/откат
+- экспорт zip
+- настройка xAI/Grok в localStorage
+- локальный fallback без внешней инфраструктуры
